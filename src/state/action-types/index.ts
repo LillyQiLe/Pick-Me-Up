@@ -3,3 +3,7 @@ export enum ActionType {
     WITHDRAW = "withdraw",
     BANKRUPT = "bankrupt",
 }
+
+export enum ContentActionType {
+    CHANGECONTENT = "changeContent",
+}

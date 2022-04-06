@@ -1,4 +1,5 @@
-import { ActionType } from "../action-types"
+import { type } from "os";
+import { ActionType, ContentActionType } from "../action-types"
 
 interface DepositAction {
     type: ActionType.DEPOSIT,
@@ -16,3 +17,9 @@ interface BankruptAction {
 
 export type Action = DepositAction | WithdrawAction | BankruptAction;
 
+interface ChangeContentAction {
+    type: ContentActionType.CHANGECONTENT,
+    content: string
+}
+
+export type ContentAction = ChangeContentAction

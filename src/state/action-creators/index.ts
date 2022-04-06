@@ -1,6 +1,6 @@
-import { ActionType } from "../action-types";
+import { ActionType, ContentActionType } from "../action-types";
 import { Dispatch } from "redux";
-import { Action } from "../actions";
+import { Action, ContentAction } from "../actions";
 
 export const depositMoney = (amont: number) => {
     return (dispath: Dispatch<Action>) => {
@@ -24,6 +24,15 @@ export const bankruptMoney = () => {
     return (dispath: Dispatch<Action>) => {
         dispath({
             type: ActionType.BANKRUPT
+        })
+    }
+}
+
+export const changeContent = (content: string) => {
+    return (dispath: Dispatch<ContentAction>) => {
+        dispath({
+            type: ContentActionType.CHANGECONTENT,
+            content: content
         })
     }
 }
