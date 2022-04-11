@@ -23,7 +23,7 @@ function App() {
                 content === "score" ?  <Score/> :
                 content === 'result' ? <Result/> :
                 content === 'guide'  ? <Guide/> : <Proportion/>}</Content>
-      <Footer>Footer</Footer>
+      <Footer style={{ textAlign: 'center', position: 'fixed', width: '100%', margin: '520px 0 0 0' }}>Pick Me Up ©2022 Created by Qi Le</Footer>
     </Layout>
   );
 }
