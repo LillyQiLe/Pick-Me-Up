@@ -8,6 +8,11 @@ function Guide() {
   const { depositMoney, withdrawMoney, bankruptMoney } = bindActionCreators(actionCreators, dispatch);
   const amount = useSelector((state: State) => state.bank)
 
+  const handleDepositMoney = () => {
+    depositMoney(100);
+    console.log(amount);
+  }
+
   return (
     <>
       <Row>
@@ -17,7 +22,7 @@ function Guide() {
       </Row>
       <Row>
         <Col>
-          <Button onClick={() => depositMoney(100)}>DEPOSIT</Button>
+          <Button onClick={handleDepositMoney}>DEPOSIT</Button>
           <Button onClick={() => withdrawMoney(10)}>WITHDRAW</Button>
           <Button onClick={() => bankruptMoney()}>BANKRUPT</Button>
         </Col>

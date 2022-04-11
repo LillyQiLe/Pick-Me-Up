@@ -1,5 +1,5 @@
 import { type } from "os";
-import { ActionType, ContentActionType } from "../action-types"
+import { ActionType, ContentActionType, TagsActionType } from "../action-types"
 
 interface DepositAction {
     type: ActionType.DEPOSIT,
@@ -23,3 +23,10 @@ interface ChangeContentAction {
 }
 
 export type ContentAction = ChangeContentAction
+
+interface SetTagsAction {
+    type: TagsActionType.SETTAGS,
+    value: Array<string>
+}
+
+export type TagsAction = SetTagsAction

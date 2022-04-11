@@ -1,104 +1,74 @@
 import React, { useCallback, useRef, useState } from "react";
-import { Button, Layout, Row, Col, Input, Table, Tag, Tooltip } from "antd";
+import { Button, Row, Col, Input, Table, Tag, Tooltip } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators, State } from "../../state";
 import { PlusOutlined } from '@ant-design/icons';
-
-const { Header, Content, Footer } = Layout;
-
-type TagState = {
-  tags: Array<string>;
-  inputVisible: boolean;
-  inputValue: string;
-  editInputIndex: number;
-  editInputValue: string;
-};
+import ProportionTable from "./proportionTable";
 
 function Proportion() {
-  const [state, setState] = useState<TagState>({
-    tags: [],
-    inputVisible: false,
-    inputValue: "",
-    editInputIndex: -1,
-    editInputValue: "",
-  });
+  const dispatch = useDispatch();
+  const {setFinallyTags} = bindActionCreators(actionCreators, dispatch);
+  const finallyTags = useSelector((state: State) => state.finallyTags);
 
-  const { tags, inputVisible, inputValue, editInputIndex, editInputValue } = state;
+  const handleSetFinallyTags = () => {
+    setFinallyTags(tags);
+    console.log(finallyTags);
+    // console.log(tags)
+  }
 
-  const handleClose = useCallback(
-    (removedTag) => {
-      const tags = state.tags.filter((tag) => tag !== removedTag);
-      console.log(tags);
-      setState({ ...state, tags: tags });
-    },
-    [state]
-  );
+  const [tags, setTags] = useState<Array<string>>([]);
+  const [inputVisible, setInputVisible] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [editInputIndex, setEditInputIndex] = useState(-1);
+  const [editInputValue, setEditInputValue] = useState('');
+  const saveInputRef = useRef(null);
+ 
+  const handleClose = (removedTag: string) => {
+    const newTags = tags.filter((tag) => tag !== removedTag);
+    console.log(tags);
+    setTags(newTags);
+  }
 
-  const showInput = useCallback(() => {
-    setState({ ...state, inputVisible: true });
-    // , () => this.input.focus()
-  }, [state]);
+  const showInput = () => {
+    setInputVisible(true);
+    // todo: inputfocus
+    // saveInputRef && saveInputRef.current.focus();
+  }
 
-  const handleInputChange = useCallback(
-    (e) => {
-      setState({ ...state, inputValue: e.target.value });
-    },
-    [state]
-  );
+  const handleInputChange = (e: { target: { value: any; }; }) => {
+    setInputValue(e.target.value);
+  }
 
-  const handleInputConfirm = useCallback(() => {
-    const { inputValue } = state;
-    let { tags } = state;
+  const handleInputConfirm = () => {
     if (inputValue && tags.indexOf(inputValue) === -1) {
-      tags = [...tags, inputValue];
+      setTags([...tags, inputValue])
     }
     console.log(tags);
-    setState({
-      ...state,
-      tags,
-      inputVisible: false,
-      inputValue: "",
-    });
-  }, [state]);
+    setInputVisible(false);
+    setInputValue('');
+  }
 
-  const handleEditInputChange = useCallback(
-    (e) => {
-      setState({ ...state, editInputValue: e.target.value });
-    },
-    [state]
-  );
+  const handleEditInputChange = (e: { target: { value: any; }; }) => {
+    setEditInputValue(e.target.value);
+  }
 
-  const handleEditInputConfirm = useCallback(() => {
-    setState(({ tags, editInputIndex, editInputValue }) => {
-      const newTags = [...tags];
-      newTags[editInputIndex] = editInputValue;
+  const handleEditInputConfirm = () => {
+    setTags([...tags, editInputValue]);
+    setEditInputIndex(-1);
+    setEditInputValue('');
+  }
 
-      return {
-        ...state,
-        tags: newTags,
-        editInputIndex: -1,
-        editInputValue: "",
-      };
-    });
-  }, [state]);
-
-  const saveInputRef = useCallback((input) => {
-    input = input;
-  }, [state]);
-
-  const saveEditInputRef = useCallback((input) => {
+  const saveEditInputRef = (input: any) => {
     // this.editInput = input;
     let editInput = input;
-  }, [state]);
-
-
+  }
 
   return (
     <>
       <Row>
         <Col span={18}>
-          <Row style={{ padding: "20px 0", fontSize: "1.2rem" }}>
+          <Row style={{ margin: "20px 0", fontSize: "1.2rem" }}>
             <Col span={14} offset={2}>
               你在意哪些因素呢？
             </Col>
@@ -127,19 +97,11 @@ function Proportion() {
                   <Tag
                     className="edit-tag"
                     key={tag}
-                    closable={index !== 0}
+                    closable={true}
                     onClose={() => handleClose(tag)}
+                    color="blue"
                   >
-                    <span
-                      onDoubleClick={(e) => {
-                        if (index !== 0) {
-                          setState(
-                            { ...state, editInputIndex: index, editInputValue: tag },
-                          );
-                          e.preventDefault();
-                        }
-                      }}
-                    >
+                    <span>
                       {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                     </span>
                   </Tag>
@@ -166,19 +128,19 @@ function Proportion() {
               )}
               {!inputVisible && (
                 <Tag className="site-tag-plus" onClick={showInput}>
-                  <PlusOutlined /> New Tag
+                  <PlusOutlined /> 新标签
                 </Tag>
               )}
             </Col>
           </Row>
           <Row>
             <Col span={2} offset={2}>
-              <Button>确定</Button>
+              <Button onClick={handleSetFinallyTags} style={{ margin: "0 0 20px 0"}}>确定</Button>
             </Col>
           </Row>
           <Row>
             <Col span={21} offset={2}>
-              <Table></Table>
+              <ProportionTable/>
             </Col>
           </Row>
         </Col>

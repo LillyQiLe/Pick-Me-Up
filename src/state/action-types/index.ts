@@ -7,3 +7,7 @@ export enum ActionType {
 export enum ContentActionType {
     CHANGECONTENT = "changeContent",
 }
+
+export enum TagsActionType {
+    SETTAGS = 'setTags'
+}

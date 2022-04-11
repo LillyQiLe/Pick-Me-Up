@@ -1,6 +1,6 @@
-import { ActionType, ContentActionType } from "../action-types";
+import { ActionType, ContentActionType, TagsActionType } from "../action-types";
 import { Dispatch } from "redux";
-import { Action, ContentAction } from "../actions";
+import { Action, ContentAction, TagsAction } from "../actions";
 
 export const depositMoney = (amont: number) => {
     return (dispath: Dispatch<Action>) => {
@@ -33,6 +33,15 @@ export const changeContent = (content: string) => {
         dispath({
             type: ContentActionType.CHANGECONTENT,
             content: content
+        })
+    }
+}
+
+export const setFinallyTags = (value: Array<string>) => {
+    return (dispath: Dispatch<TagsAction>) => {
+        dispath({
+            type: TagsActionType.SETTAGS,
+            value: value
         })
     }
 }
