@@ -147,7 +147,8 @@ function Proportion() {
           </Row>
           <Row>
             <Col span={21} offset={2}>
-              <EditableTable />
+              <Button onClick={handleSetFinallyTags} type="primary" style={{ marginTop: 16 }}>确定</Button>
+              {/* <EditableTable /> */}
             </Col>
           </Row>
         </Col>
