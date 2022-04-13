@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import { actionCreators, State } from "../../state";
 import { PlusOutlined } from '@ant-design/icons';
 import ProportionTable from "./proportionTable";
+import EditableTable from "./proportionTable copy 2";
 
 function Proportion() {
   const dispatch = useDispatch();
@@ -13,11 +14,11 @@ function Proportion() {
 
   const handleSetFinallyTags = () => {
     setFinallyTags(tags);
-    console.log(finallyTags);
+    console.log('finallyTags', finallyTags);
     // console.log(tags)
   }
 
-  const [tags, setTags] = useState<Array<string>>([]);
+  const [tags, setTags] = useState<Array<string>>(['1', '2', '3', '4']);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [editInputIndex, setEditInputIndex] = useState(-1);
@@ -26,7 +27,7 @@ function Proportion() {
  
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(tags);
+    console.log('tags', tags);
     setTags(newTags);
   }
 
@@ -44,7 +45,7 @@ function Proportion() {
     if (inputValue && tags.indexOf(inputValue) === -1) {
       setTags([...tags, inputValue])
     }
-    console.log(tags);
+    // console.log(tags);
     setInputVisible(false);
     setInputValue('');
   }
@@ -135,12 +136,18 @@ function Proportion() {
           </Row>
           <Row>
             <Col span={2} offset={2}>
-              <Button onClick={handleSetFinallyTags} style={{ margin: "0 0 20px 0"}}>确定</Button>
+              <Button onClick={handleSetFinallyTags} type="primary" style={{ marginBottom: 16 }}>确定</Button>
+              {/* <Button onClick={handleSetFinallyTags} style={{ margin: "0 0 20px 0"}}>确定</Button> */}
             </Col>
           </Row>
           <Row>
             <Col span={21} offset={2}>
               <ProportionTable/>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={21} offset={2}>
+              <EditableTable />
             </Col>
           </Row>
         </Col>

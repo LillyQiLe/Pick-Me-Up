@@ -1,49 +1,142 @@
-import { Space, Table, Tag } from "antd";
-import Column from "antd/lib/table/Column";
-import ColumnGroup from "antd/lib/table/ColumnGroup";
 import { useDispatch, useSelector } from "react-redux";
+import { Table, Input, Button, Popconfirm, Form, InputRef, InputNumber } from "antd";
+import { FormInstance } from "antd/lib/form";
 import { State } from "../../state";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { ColumnsType } from "antd/es/table";
+import { useForm } from "antd/es/form/Form";
 
+interface Item {
+  key: number;
+  yinsu: string;
+  [index: number]: number | string;
+}
 
-function ProportionTable() {
-  const dispatch = useDispatch();
-  const finallyTags = useSelector((state: State) => state.finallyTags);
+interface Column {
+  key: string | number,
+  title: string,
+  dataIndex: string | number,
+  editable: boolean
+}
 
-  const dataSource = [
-    {
-      key: '1',
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号',
-    },
-    {
-      key: '2',
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号',
-    },
-  ];
-  
-  const columns = [
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '年龄',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: '住址',
-      dataIndex: 'address',
-      key: 'address',
-    },
-  ];
+interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+  editing: boolean;
+  dataIndex: string;
+  title: any;
+  inputType: 'number';
+  record: Item;
+  index: number;
+  children: React.ReactNode;
+}
+
+const EditableCell: React.FC<EditableCellProps> = ({
+  editing,
+  dataIndex,
+  title,
+  inputType,
+  record,
+  index,
+  children,
+  ...restProps
+}) => {
+  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
 
   return (
-    <Table dataSource={dataSource} columns={columns}/>
+    <td {...restProps}>
+      {editing ? (
+        <Form.Item
+          name={dataIndex}
+          style={{ margin: 0 }}
+          rules={[
+            {
+              required: true,
+              message: `Please Input ${title}!`,
+            },
+          ]}
+        >
+          {inputNode}
+        </Form.Item>
+      ) : (
+        children
+      )}
+    </td>
+  );
+};
+
+function ProportionTable() {
+  const initialColumn: Column[] = [
+    {
+      key: "yinsu",
+      title: "因素",
+      dataIndex: "yinsu",
+      editable: false
+    }
+  ];
+  const finallyTags = useSelector((state: State) => state.finallyTags);
+  const [columns, setColumns] = useState<Column[]>(initialColumn);
+  const [data, setData] = useState<Item[]>([]);
+
+  const [form] = useForm();
+
+
+  useEffect(() => {
+    let newColumns: Column[] = [];
+    let newDate: Item[] = [];
+
+    finallyTags.forEach((value, index) => {
+      let column: Column = {
+        key: index,
+        title: value,
+        dataIndex: index,
+        editable: true
+      }
+      let singleRow: Item = {
+        key: index,
+        yinsu: value,
+      }
+      
+      newColumns.push(column);
+      newDate.push(singleRow);
+    })
+    
+    setColumns([...initialColumn, ...newColumns]);
+    setData([...newDate]);
+    console.log('columns', [...initialColumn, ...newColumns])
+  }, [finallyTags]);
+  
+  const mergedColumns = columns.map(col => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record: Item) => ({
+        record,
+        inputType: 'number',
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: true,
+        // editing: isEditing(record),
+      }),
+    };
+  });
+
+  console.log('mergedColumns', mergedColumns);
+
+  return (
+    <Form form={form} component={false}>
+      <Table<Item> 
+        components={{
+          body: {
+            cell: EditableCell
+          }
+        }}
+        columns={mergedColumns} 
+        dataSource={data}
+        pagination={ false }
+        bordered
+      />
+    </Form>
   );
 }
 
