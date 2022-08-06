@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators, State } from "../../state";
 import { PlusOutlined } from '@ant-design/icons';
-import ProportionTable from "./proportionTable";
-import EditableTable from "./proportionTable copy 2";
+import ProportionTable from "./proportionTable copy";
+import EditableTable from "./proportionTable";
 
 function Proportion() {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ function Proportion() {
     // console.log(tags)
   }
 
-  const [tags, setTags] = useState<Array<string>>(['1', '2', '3', '4']);
+  const [tags, setTags] = useState<Array<string>>(['稳定性', '薪资', '成长空间', '位置', '换岗难易度', '上班时长']);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [editInputIndex, setEditInputIndex] = useState(-1);
@@ -142,15 +142,16 @@ function Proportion() {
           </Row>
           <Row>
             <Col span={21} offset={2}>
-              <ProportionTable/>
+              <EditableTable/>
+              {/* <ProportionTable/> */}
             </Col>
           </Row>
-          <Row>
+          {/* <Row>
             <Col span={21} offset={2}>
               <Button onClick={handleSetFinallyTags} type="primary" style={{ marginTop: 16 }}>确定</Button>
-              {/* <EditableTable /> */}
+              <EditableTable />
             </Col>
-          </Row>
+          </Row> */}
         </Col>
         <Col span={6} style={{ padding: "20px 0 0 0" }}>
           <Tag color="magenta">magenta</Tag>

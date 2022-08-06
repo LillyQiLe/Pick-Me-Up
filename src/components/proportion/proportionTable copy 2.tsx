@@ -20,6 +20,12 @@ interface EditableRowProps {
 // 每一行占一个form
 const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
   const [form] = Form.useForm();
+
+      
+  // useEffect(() => {
+  //   console.log('form', form ? form.getFieldInstance : 'none');
+  // })
+
   return (
     <Form form={form} component={false}>
       <EditableContext.Provider value={form}>
@@ -206,6 +212,7 @@ class EditableTable extends React.Component<
       ...row,
     });
     this.setState({ dataSource: newData });
+    console.log(1, newData);
   };
 
   render() {
@@ -231,6 +238,8 @@ class EditableTable extends React.Component<
         }),
       };
     });
+
+    
     return (
       <div>
         <Button
